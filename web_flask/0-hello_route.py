@@ -1,5 +1,7 @@
+#!/usr/bin/python3
+''' Script thst runs an app with flask '''
 from flask import Flask
-''' Script thst runs an app with flask'''
+
 
 app = Flask(__name__)
 
