@@ -16,5 +16,19 @@ def hello_HBNB():
     return "HBNB!"
 
 
+@app.route("/c/<text>", strict_slashes=False)
+def welcome_c(text):
+    ''' Function called through the /hbnb route '''
+    text = text.replace('_', ' ')
+    return f"C {text}"
+
+
+@app.route("/python/<value>", strict_slashes=False)
+def welcome_python(value):
+    ''' Function called through the /hbnb route '''
+    value = value.replace('_', ' ')
+    return f"Python {value}"
+
+
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)
