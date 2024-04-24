@@ -18,14 +18,14 @@ def hello_HBNB():
 
 @app.route("/c/<text>", strict_slashes=False)
 def welcome_c(text):
-    ''' Function called through the /hbnb route '''
+    ''' Function called through the /hbnb/c/<var> route '''
     text = text.replace('_', ' ')
     return f"C {text}"
 
 
 @app.route("/python/<value>", strict_slashes=False)
 def welcome_python(value):
-    ''' Function called through the /hbnb route '''
+    ''' Function called through the /hbnb/python/<var> route '''
     value = value.replace('_', ' ')
     return f"Python {value}"
 
