@@ -9,7 +9,7 @@ app = Flask(__name__)
 @app.route("/", strict_slashes=False)
 def hello_world():
     ''' Function called through the / route '''
-    return "Hello, HBNB!"
+    return "Hello HBNB!"
 
 
 if __name__ == "__main__":

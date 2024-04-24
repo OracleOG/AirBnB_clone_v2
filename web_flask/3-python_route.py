@@ -15,7 +15,7 @@ def hello_world():
 @app.route("/hbnb", strict_slashes=False)
 def hello_HBNB():
     ''' Function called through the /hbnb route '''
-    return "HBNB!"
+    return "HBNB"
 
 
 @app.route("/c/<text>", strict_slashes=False)
@@ -25,11 +25,13 @@ def welcome_c(text):
     return f"C {text}"
 
 
-@app.route("/python/<value>", strict_slashes=False)
-def welcome_python(value):
-    ''' Function called through the /hbnb/python/<var> route '''
-    value = value.replace('_', ' ')
-    return f"Python {value}"
+@app.route('/python/', strict_slashes=False)
+@app.route('/python/<text>', strict_slashes=False)
+def python_text(text='is cool'):
+    """ Function called with /python/<text> route """
+    if text is not 'is cool':
+        text = text.replace('_', ' ')
+    return f"Python {text}"
 
 
 if __name__ == "__main__":
