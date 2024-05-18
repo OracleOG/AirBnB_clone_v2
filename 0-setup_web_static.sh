@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 # script that configures an nginix server with some folders and files
 
 sudo apt-get -y update
