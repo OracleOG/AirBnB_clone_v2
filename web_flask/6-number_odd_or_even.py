@@ -49,7 +49,7 @@ def is_number(n):
 @app.route('/number_odd_or_even/<int:n>', strict_slashes=False)
 def even_or_odd(n):
     """ Function called with /number_odd_or_even/<int:n> route """
-    return render_template('6-number_odd_or_even.html', num=n)
+    return render_template('6-number_odd_or_even.html', number=n)
 
 
 if __name__ == "__main__":
