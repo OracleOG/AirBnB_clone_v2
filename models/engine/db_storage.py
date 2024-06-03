@@ -22,7 +22,7 @@ class DBStorage:
     def __init__(self):
         user = getenv("HBNB_MYSQL_USER")
         passwd = 'Hbnb_dev_pwd$123'
-        #passwd = getenv("HBNB_MYSQL_PWD")
+#        #passwd = getenv("HBNB_MYSQL_PWD")
         db = getenv("HBNB_MYSQL_DB")
         host = getenv("HBNB_MYSQL_HOST")
         env = getenv("HBNB_ENV")

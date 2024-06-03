@@ -9,8 +9,8 @@ from os import getenv
 
 
 class State(BaseModel, Base):
-    """ State for MySQL DB 
-        
+    """ State for MySQL DB
+
         Inherits from MySQLQlchemy Base to MySQL tables
 
         Attribute:
@@ -27,7 +27,8 @@ class State(BaseModel, Base):
         @property
         def cities(self):
             """Gets list of city instances with the current state_id
-               Getter attribute for Filestorage relationship btw states and cities
+            Getter attribute for Filestorage
+            relationship btw states and cities
             """
             cities_list = []
             for city in models.storage.all(City).values():
