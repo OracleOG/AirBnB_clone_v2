@@ -11,9 +11,12 @@ app = Flask(__name__)
 @app.route("/states_list", strict_slashes=False)
 def list_states():
     ''' Function called through the / route '''
+#    state_dict = storage.all(State)
+#    state_list = {value.id: value.name for value in state_dict.values()}
+#    return render_template('7-states_list.html', states=state_list,)
     state_dict = storage.all(State)
-    state_list = {value.id: value.name for value in state_dict.values()}
-    return render_template('7-states_list.html', states=state_list,)
+    return render_template('7-states_list.html', states=state_dict)
+
 
 
 @app.teardown_appcontext
