@@ -21,8 +21,8 @@ class DBStorage:
 
     def __init__(self):
         user = getenv("HBNB_MYSQL_USER")
-        passwd = 'Hbnb_dev_pwd$123'
-#        #passwd = getenv("HBNB_MYSQL_PWD")
+#        passwd = 'Hbnb_dev_pwd$123'
+        passwd = getenv("HBNB_MYSQL_PWD")
         db = getenv("HBNB_MYSQL_DB")
         host = getenv("HBNB_MYSQL_HOST")
         env = getenv("HBNB_ENV")
@@ -51,7 +51,7 @@ class DBStorage:
         else:
             lista = [State, City, User, Place, Review, Amenity]
             for clase in lista:
-                query = self.__session.query(clase)
+                query = self.__session.query(clase).all()
                 for elem in query:
                     key = "{}.{}".format(type(elem).__name__, elem.id)
                     dicts[key] = elem
