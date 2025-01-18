@@ -1,36 +1,35 @@
 #!/usr/bin/python3
-""" State Module for HBNB project """
+"""This is the state class"""
+from sqlalchemy.ext.declarative import declarative_base
 from models.base_model import BaseModel, Base
-from models.city import City
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String
 import models
-from os import getenv
+from models.city import City
+import shlex
 
 
 class State(BaseModel, Base):
-    """ State for MySQL DB
-
-        Inherits from MySQLQlchemy Base to MySQL tables
-
-        Attribute:
-        __tablename__(str): Name of MySQL table storing states
-        name (str): Name of state
-        city (sqlalchemy relationship): State-City order.
+    """This is the class for State
+    Attributes:
+        name: input name
     """
     __tablename__ = "states"
     name = Column(String(128), nullable=False)
-    cities = relationship("City", backref="state", cascade="all, delete, delete-orphan")
+    cities = relationship("City", cascade='all, delete, delete-orphan',
+                          backref="state")
 
-    if getenv('HBNB_TYPE_STORAGE') != 'db':
-        @property
-        def cities(self):
-            """Gets list of city instances with the current state_id
-            Getter attribute for Filestorage
-            relationship btw states and cities
-            """
-            cities_list = []
-            for city in models.storage.all(City).values():
-                if city.state_id == self.id:
-                    cities_list.append(city)
-            return cities_list
+    @property
+    def cities(self):
+        var = models.storage.all()
+        lista = []
+        result = []
+        for key in var:
+            city = key.replace('.', ' ')
+            city = shlex.split(city)
+            if (city[0] == 'City'):
+                lista.append(var[key])
+        for elem in lista:
+            if (elem.state_id == self.id):
+                result.append(elem)
+        return (result)
