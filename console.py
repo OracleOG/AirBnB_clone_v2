@@ -211,31 +211,36 @@ class HBNBCommand(cmd.Cmd):
         print("Destroys an individual instance of a class")
         print("[Usage]: destroy <className> <objectId>\n")
 
-    def do_all(self, line):
-        """Prints all string representation of all instances
-        Exceptions:
-            NameError: when there is no object taht has the name
-        """
-        
-        my_list = []
-        if not line:
-            for key in objects:
-                my_list.append(objects[key])
-            print(my_list)
-            return
-        try:
-            args = line.split(" ")
-            if args[0] not in self.classes:
-                raise NameError()
-            objects = storage.all(self.classes[args[0]])
-            for key in objects:
-                name = key.split('.')
-                if name[0] == args[0]:
-                    my_list.append(objects[key])
-            print(my_list)
-        except NameError:
-            print("** class doesn't exist **")
+    def do_all(self, args):
+        """ Shows all objects, or all objects of a class"""
+        print_list = []
 
+        if args:
+            args = args.split(' ')[0]  # remove possible trailing args
+            if args not in HBNBCommand.classes:
+                print("** class doesn't exist **")
+                return
+            stored_obj = storage.all(HBNBCommand.classes[args])
+            type_of_storage = type(stored_obj)
+            if type_of_storage == list:
+                for row in stored_obj:
+                    for k, v in row.items():
+                        if k.split('.')[0] == args:
+                            print_list.append(str(v))
+            else:
+                for k, v in stored_obj.items():
+                    if k.split('.')[0] == args:
+                        print_list.append(str(v))
+        else:
+            stored_obj = storage.all()
+            if type(stored_obj) == dict:
+                for k, v in stored_obj.items():
+                    print_list.append(str(v))
+            else:
+                for row in stored_obj:
+                    for col in row:
+                        print_list.append(str(col))
+        print(print_list)
     def help_all(self):
         """ Help information for the all command """
         print("Shows all objects, or all of a class")
