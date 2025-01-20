@@ -1,53 +1,35 @@
-#!/usr/bin/python3
-""" Place Module for HBNB project """
-from models.base_model import BaseModel, Base
-from sqlalchemy import Column, Integer, String, ForeignKey, Table, Float
+from sqlalchemy import Table, Column, Integer, Float, String, ForeignKey
 from sqlalchemy.orm import relationship
+from models.base_model import BaseModel, Base
 from os import getenv
+from models.amenity import Amenity
 import models
 
-metadata = Base.metadata
 
+# Many-to-Many relationship table
+place_amenity = Table(
+    'place_amenity',
+    Base.metadata,
+    Column('place_id', String(60), ForeignKey('places.id'), primary_key=True, nullable=False),
+    Column('amenity_id', String(60), ForeignKey('amenities.id'), primary_key=True, nullable=False)
+)
 
 class Place(BaseModel, Base):
-    """ A place to stay """
-    __tablename__ = 'places'
-    city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
-    user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
+    """Place class representing properties available for rent or use"""
+    __tablename__ = "places"
+    city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
+    user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
     name = Column(String(128), nullable=False)
     description = Column(String(1024))
-    number_rooms = Column(Integer, default=0, nullable=False)
-    number_bathrooms = Column(Integer, default=0, nullable=False)
-    max_guest = Column(Integer, default=0, nullable=False)
-    price_by_night = Column(Integer, default=0, nullable=False)
-    latitude = Column(Float, nullable=True)
-    longitude = Column(Float, nullable=True)
-    # city = relationship('City', back_populates='places')
+    number_rooms = Column(Integer, nullable=False, default=0)
+    number_bathrooms = Column(Integer, nullable=False, default=0)
+    max_guest = Column(Integer, nullable=False, default=0)
+    price_by_night = Column(Integer, nullable=False, default=0)
+    latitude = Column(Float)
+    longitude = Column(Float)
     amenity_ids = []
-    reviews = relationship('Review', back_populates='place')
-    place_amenity = Table(
-        'place_amenity',
-        metadata,
-        Column(
-            'place_id',
-            String(60),
-            ForeignKey('places.id'),
-            primary_key=True
-        ),
-        Column('amenity_id',
-               String(60),
-               ForeignKey('amenities.id'),
-               primary_key=True
-               )
-        )
 
     if getenv('HBNB_TYPE_STORAGE') == 'db':
-        reviews = relationship(
-            'Review',
-            backref='place',
-            cascade='all, delete'
-        )
-
         amenities = relationship(
             'Amenity',
             secondary=place_amenity,
@@ -55,6 +37,16 @@ class Place(BaseModel, Base):
         )
     else:
         @property
-        def reviews(self):
-            objs = models.storage.all(Review)
-            return [v for k, v in obj.items() if v.place_id == self.id]
+        def amenities(self):
+            """Getter for amenities in FileStorage"""
+            all_amenities = models.storage.all(Amenity)
+            return [
+                amenity for amenity in all_amenities.values()
+                if amenity.id in self.amenity_ids
+            ]
+
+        @amenities.setter
+        def amenities(self, obj):
+            """Setter for amenities in FileStorage"""
+            if isinstance(obj, Amenity) and obj.id not in self.amenity_ids:
+                self.amenity_ids.append(obj.id)
