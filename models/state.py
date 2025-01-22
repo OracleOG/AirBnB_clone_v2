@@ -15,12 +15,12 @@ class State(BaseModel, Base):
     Attributes:
         name: input name
     """
-    __tablename__ = "states"
-    name = Column(String(128), nullable=False)
-    cities = relationship("City", cascade='all, delete, delete-orphan',
-                          backref="state")
-
-    if (getenv('HBNB_TYPE_STORAGE') != 'db'):
+    if (getenv('HBNB_TYPE_STORAGE') == 'db'):
+        __tablename__ = "states"
+        name = Column(String(128), nullable=False)
+        cities = relationship("City", cascade='all, delete, delete-orphan',
+                            backref="state")
+    else:
         @property
         def cities(self):
             var = models.storage.all()
