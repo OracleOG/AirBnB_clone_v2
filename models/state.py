@@ -15,14 +15,15 @@ class State(BaseModel, Base):
     Attributes:
         name: input name
     """
-    
+
     if (getenv('HBNB_TYPE_STORAGE') == 'db'):
         __tablename__ = "states"
         name = Column(String(128), nullable=False)
         cities = relationship("City", cascade='all, delete, delete-orphan',
-                                back_populates="state")
+                              back_populates="state")
     else:
         name = ""
+
         @property
         def cities(self):
             """getter for list of city instances related to the state"""
