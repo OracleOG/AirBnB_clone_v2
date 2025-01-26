@@ -22,16 +22,8 @@ class State(BaseModel, Base):
                             backref="state")
     else:
         @property
-        def cities(self):
-            var = models.storage.all()
-            lista = []
-            result = []
-            for key in var:
-                city = key.replace('.', ' ')
-                city = shlex.split(city)
-                if (city[0] == 'City'):
-                    lista.append(var[key])
-            for elem in lista:
-                if (elem.state_id == self.id):
-                    result.append(elem)
-            return (result)
+        def get_cities(self):
+            obj = models.storage.all(City)
+            ls = [v for k, v in obj.items() if v.state_id == self.id]
+            sorted(ls, key=lambda city: city.name)
+            return ls
