@@ -15,15 +15,20 @@ class State(BaseModel, Base):
     Attributes:
         name: input name
     """
+    
     if (getenv('HBNB_TYPE_STORAGE') == 'db'):
         __tablename__ = "states"
         name = Column(String(128), nullable=False)
         cities = relationship("City", cascade='all, delete, delete-orphan',
-                            backref="state")
+                                back_populates="state")
     else:
+        name = ""
         @property
-        def get_cities(self):
-            obj = models.storage.all(City)
-            ls = [v for k, v in obj.items() if v.state_id == self.id]
-            sorted(ls, key=lambda city: city.name)
-            return ls
+        def cities(self):
+            """getter for list of city instances related to the state"""
+            city_list = []
+            all_cities = models.storage.all(City)
+            for city in all_cities.values():
+                if city.state_id == self.id:
+                    city_list.append(city)
+            return city_list

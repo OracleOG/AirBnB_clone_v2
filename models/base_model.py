@@ -5,17 +5,21 @@ import models
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime
+from os import getenv
 
-
-Base = declarative_base()
+if getenv('HBNB_TYPE_STORAGE') == 'db':
+    Base = declarative_base()
+else:
+    Base = object
 
 
 class BaseModel:
     """A base class that defines attributes/methods for other classes"""
 
-    id = Column(String(60), nullable=False, primary_key=True, unique=True)
-    created_at = Column(DateTime, default=(datetime.utcnow()), nullable=False)
-    updated_at = Column(DateTime, default=(datetime.utcnow()), nullable=False)
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
+        id = Column(String(60), nullable=False, primary_key=True, unique=True)
+        created_at = Column(DateTime, default=(datetime.utcnow()), nullable=False)
+        updated_at = Column(DateTime, default=(datetime.utcnow()), nullable=False)
 
     def __init__(self, *args, **kwargs):
         """Instatntiates a new base model based on arguments passed
