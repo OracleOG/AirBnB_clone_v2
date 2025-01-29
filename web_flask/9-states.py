@@ -20,12 +20,12 @@ def list_states():
 def list_states_id(id):
     ''' Function called through the / route '''
     state_dict = storage.all(State)
-    state_list = []
+    state = None
     for value in state_dict.values():
         if value.id == id:
-            state_list.append(value)
+            state = value
 
-    return render_template('9-states.html', states=state_list[0])
+    return render_template('9-states.html', state=state)
 
 
 @app.teardown_appcontext
