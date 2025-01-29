@@ -13,7 +13,8 @@ app = Flask(__name__)
 def list_states():
     ''' Function called through the / route '''
     state_dict = storage.all(State)
-    return render_template('8-cities_by_states.html', states=state_dict)
+    city_dict = storage.all(City)
+    return render_template('8-cities_by_states.html', states=state_dict, cities=city_dict)
 
 
 @app.teardown_appcontext
